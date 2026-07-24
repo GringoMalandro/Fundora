@@ -73,7 +73,10 @@ export default function Home() {
       <main>
         <section className="container-app py-5 md:py-8">
           <div className="relative flex min-h-[400px] items-center overflow-hidden rounded-[2rem] bg-ink px-7 py-12 text-white sm:min-h-[430px] md:min-h-[460px] md:px-12 md:py-14 lg:min-h-[490px] lg:px-16">
-            <div className="absolute -right-20 -top-24 size-80 rounded-full bg-lime/20 blur-3xl" /><div className="absolute -bottom-32 left-1/3 size-72 rounded-full bg-forest/60 blur-3xl" />
+            <Image src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=90" alt="People collaborating on a community project" fill priority sizes="100vw" className="object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/90 to-forest/50" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(200,242,11,0.24),transparent_28%)]" />
+            <div className="absolute -bottom-32 left-1/3 size-72 rounded-full bg-forest/60 blur-3xl" />
             <motion.div
               key={slide}
               {...reveal}
