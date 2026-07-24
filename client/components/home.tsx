@@ -105,7 +105,7 @@ export default function Home() {
                 </Link>
               </div>
             </motion.div>
-            <div className="absolute bottom-8 right-10 hidden rotate-3 rounded-2xl bg-white p-4 text-ink shadow-2xl lg:block">
+            <motion.div animate={{ y: [0, -12, 0], rotate: [3, 1, 3] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} className="absolute bottom-8 right-10 hidden rounded-2xl bg-white p-4 text-ink shadow-2xl lg:block">
               <div className="flex items-center gap-3">
                 <span className="grid size-11 place-items-center rounded-full bg-lime">
                   <Sparkles />
@@ -115,7 +115,7 @@ export default function Home() {
                   <p className="text-xs text-black/50">created this month</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
             <div className="absolute bottom-8 right-8 flex gap-2 md:right-12">
               <button
                 onClick={() => setSlide((slide + 2) % 3)}
