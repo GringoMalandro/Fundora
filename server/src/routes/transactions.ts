@@ -26,12 +26,13 @@ router.get("/dashboard/stats", auth, async (req: AuthRequest, res) => {
     });
   }
   if (req.user!.role === "creator") {
-    const [campaigns, pending] = await Promise.all([
+    const [campaigns, pending, creator] = await Promise.all([
       Campaign.find({ creatorEmail: req.user!.email }),
       Contribution.countDocuments({
         creatorEmail: req.user!.email,
         status: "pending",
       }),
+      User.findOne({ email: req.user!.email }),
     ]);
     return res.json({
       total: campaigns.length,
@@ -39,6 +40,7 @@ router.get("/dashboard/stats", auth, async (req: AuthRequest, res) => {
         (x) => x.status === "approved" && x.deadline && x.deadline > new Date(),
       ).length,
       raised: campaigns.reduce((n, x) => n + (x.raised || 0), 0),
+      availableRaisedCredits: creator?.raisedCredits || 0,
       pending,
     });
   }

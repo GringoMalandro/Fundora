@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { api } from "@/lib/api";
 import { campaigns as demo } from "@/lib/data";
@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ImageUpload from "./image-upload";
+import Footer from "./footer";
 import { toast } from "sonner";
 type Item = Record<string, any>;
 const packs = [
@@ -71,6 +72,8 @@ export default function Dashboard() {
   const [pages, setPages] = useState(1);
   const [notifications, setNotifications] = useState<Item[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+  const [selectedContribution, setSelectedContribution] = useState<Item | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profile, setProfile] = useState<Item>({ name: "", photo: "" });
   const [campaign, setCampaign] = useState<Item>({
@@ -99,6 +102,13 @@ export default function Dashboard() {
       loadTab("Home");
     }
   }, [user]);
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) setShowNotifications(false);
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, []);
   if (loading || !user)
     return (
       <div className="grid min-h-screen place-items-center font-bold">
@@ -118,7 +128,7 @@ export default function Dashboard() {
         setItems(r.items);
         setPages(r.pages);
       } else if (t === "Payment history") {
-        setItems(await api<Item[]>("/payments"));
+        setItems(await api<Item[]>(role === "creator" ? "/withdrawals" : "/payments"));
       } else if (t === "Withdrawals" || t === "Withdrawal requests") {
         setItems(await api<Item[]>("/withdrawals"));
       } else if (t === "My campaigns") {
@@ -341,7 +351,7 @@ export default function Dashboard() {
       </aside>
       <main className="lg:ml-72">
         <header className="flex h-20 items-center justify-between border-b border-black/5 bg-white px-5 md:px-8">
-          <div className="flex items-center gap-3">
+          <div ref={notificationRef} className="flex items-center gap-3">
             <button className="lg:hidden" onClick={() => setMenu(true)}>
               <Menu />
             </button>
@@ -476,6 +486,7 @@ export default function Dashboard() {
               value={withdraw}
               setValue={setWithdraw}
               onSubmit={requestWithdrawal}
+              availableCredits={dashboardStats.availableRaisedCredits ?? 0}
             />
           )}{" "}
           {tab === "My campaigns" && (
@@ -514,9 +525,11 @@ export default function Dashboard() {
               onRemoveUser={removeUser}
               onWithdrawal={approveWithdrawal}
               onReport={resolveReport}
+              onViewContribution={setSelectedContribution}
             />
           )}
         </div>
+        <Footer />
       </main>
       {profileOpen && (
         <ProfileModal
@@ -526,6 +539,7 @@ export default function Dashboard() {
           onClose={() => setProfileOpen(false)}
         />
       )}
+      {selectedContribution && <ContributionModal contribution={selectedContribution} onClose={() => setSelectedContribution(null)} />}
     </div>
   );
 }
@@ -628,14 +642,21 @@ function WithdrawalForm({
   value,
   setValue,
   onSubmit,
+  availableCredits,
 }: {
   value: Item;
   setValue: (x: Item) => void;
   onSubmit: () => void;
+  availableCredits: number;
 }) {
+  const canWithdraw = availableCredits >= 200;
   return (
     <div className="card mt-8 max-w-xl p-6">
       <h3 className="text-xl font-black">Request a withdrawal</h3>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl bg-cream p-4"><p className="text-xs text-black/50">Available raised credits</p><b className="mt-1 block text-2xl">{availableCredits}</b></div>
+        <div className="rounded-2xl bg-cream p-4"><p className="text-xs text-black/50">Available earnings</p><b className="mt-1 block text-2xl">${(availableCredits / 20).toFixed(2)}</b></div>
+      </div>
       <p className="mt-1 text-sm text-black/50">
         Minimum 200 credits · 20 credits = $1
       </p>
@@ -644,6 +665,7 @@ function WithdrawalForm({
         <input
           type="number"
           min="200"
+          max={availableCredits}
           className="input mt-2"
           value={value.credits}
           onChange={(e) =>
@@ -679,9 +701,7 @@ function WithdrawalForm({
           }
         />
       </label>
-      <button onClick={onSubmit} className="btn-primary mt-5">
-        Submit withdrawal
-      </button>
+      {canWithdraw ? <button onClick={onSubmit} disabled={value.credits > availableCredits} className="btn-primary mt-5 disabled:opacity-40">Submit withdrawal</button> : <p className="mt-5 font-bold text-red-600">Insufficient credit. You need at least 200 raised credits to withdraw.</p>}
     </div>
   );
 }
@@ -781,6 +801,7 @@ function DataTable({
   onRemoveUser,
   onWithdrawal,
   onReport,
+  onViewContribution,
 }: {
   tab: string;
   items: Item[];
@@ -797,6 +818,7 @@ function DataTable({
   onRemoveUser: (id: string) => void;
   onWithdrawal: (id: string) => void;
   onReport: (id: string, action?: string) => void;
+  onViewContribution: (contribution: Item) => void;
 }) {
   return (
     <div className="mt-8">
@@ -833,9 +855,10 @@ function DataTable({
                 <td className="p-3">{i.status || "—"}</td>
                 <td className="flex gap-2 p-3">
                   {role === "creator" &&
-                    tab === "Contribution reviews" &&
-                    i.status === "pending" && (
+                    tab === "Contribution reviews" && (
                       <>
+                        <button onClick={() => onViewContribution(i)} className="rounded-full bg-cream px-3 py-2 text-xs font-bold">View</button>
+                        {i.status === "pending" && <>
                         <button
                           onClick={() => onStatus(i._id, "approved")}
                           className="rounded-full bg-green-100 p-2 text-green-700"
@@ -848,6 +871,7 @@ function DataTable({
                         >
                           <X size={16} />
                         </button>
+                        </>}
                       </>
                     )}
                   {tab === "Manage campaigns" && i.status === "pending" && (
@@ -909,6 +933,12 @@ function DataTable({
                       >
                         Suspend
                       </button>
+                      <button
+                        onClick={() => onDelete(i.campaignId)}
+                        className="rounded-full bg-red-100 px-3 py-2 text-xs font-bold text-red-700"
+                      >
+                        Delete campaign
+                      </button>
                     </>
                   )}
                   {tab === "Manage campaigns" && (
@@ -948,6 +978,14 @@ function DataTable({
       )}
     </div>
   );
+}
+function ContributionModal({ contribution, onClose }: { contribution: Item; onClose: () => void }) {
+  return <div className="fixed inset-0 z-[60] grid place-items-center bg-black/40 p-5" onClick={onClose}>
+    <div className="card w-full max-w-lg p-7" onClick={(event) => event.stopPropagation()}>
+      <div className="flex items-center justify-between"><h2 className="text-2xl font-black">Contribution details</h2><button onClick={onClose}><X /></button></div>
+      <dl className="mt-6 space-y-4 text-sm"><div><dt className="text-black/45">Supporter</dt><dd className="font-bold">{contribution.supporterName} · {contribution.supporterEmail}</dd></div><div><dt className="text-black/45">Campaign</dt><dd className="font-bold">{contribution.campaignTitle}</dd></div><div><dt className="text-black/45">Contribution amount</dt><dd className="font-bold">{contribution.amount} credits</dd></div><div><dt className="text-black/45">Message</dt><dd className="rounded-xl bg-cream p-3">{contribution.message || "No message was included."}</dd></div><div><dt className="text-black/45">Status</dt><dd className="font-bold capitalize">{contribution.status}</dd></div></dl>
+    </div>
+  </div>;
 }
 function ProfileModal({
   value,

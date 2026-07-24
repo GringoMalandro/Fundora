@@ -31,6 +31,7 @@ export default function Navbar() {
             <Link href="/login" className="font-semibold">Login</Link>
             <Link href="/register" className="btn-primary !px-5 !py-2.5">Get started</Link>
           </>}
+          <a href="https://github.com/GalibDev/Fundora" target="_blank" rel="noreferrer" className="text-sm font-bold underline decoration-lime decoration-4 underline-offset-4">Join as developer</a>
         </nav>
         <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">{open ? <X /> : <Menu />}</button>
       </div>
@@ -41,6 +42,7 @@ export default function Navbar() {
         <Link href={user ? "/dashboard" : "/login"} onClick={closeMenu}>{user ? "Dashboard" : "Login"}</Link>
         {!user && <Link href="/register" onClick={closeMenu}>Register</Link>}
         {user && <button className="text-left" onClick={logout}>Logout</button>}
+        <a href="https://github.com/GalibDev/Fundora" target="_blank" rel="noreferrer">Join as developer</a>
       </nav>}
     </header>
   );

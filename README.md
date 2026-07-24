@@ -19,6 +19,13 @@
 
 Fundora connects people who have meaningful ideas with supporters who want to fund them. Supporters purchase credits through Stripe, creators launch and manage campaigns, and administrators moderate the marketplace from a role-aware dashboard.
 
+## Demo admin access
+
+- **Email:** `admin@fundora.com`
+- **Password:** `Admin123!`
+
+> Change the admin password through the `ADMIN_PASSWORD` environment variable before a real production launch.
+
 ## Preview
 
 <p align="center">

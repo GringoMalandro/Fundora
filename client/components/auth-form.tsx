@@ -37,7 +37,7 @@ export default function AuthForm({ register = false }: { register?: boolean }) {
     try {
       register ? await auth.register(v) : await auth.login(v.email, v.password);
       toast.success(register ? "Welcome to Fundora!" : "Welcome back!");
-      router.push("/");
+      router.push("/dashboard");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Please try again");
     }
