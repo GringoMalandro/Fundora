@@ -272,6 +272,18 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+        <section id="about" className="container-app py-12 md:py-16">
+          <div className="grid overflow-hidden rounded-[2rem] bg-ink text-white lg:grid-cols-[1.1fr_.9fr]">
+            <div className="p-8 md:p-12">
+              <p className="eyebrow !text-lime">About Fundora</p>
+              <h2 className="mt-4 text-4xl font-black leading-tight md:text-5xl">More than funding. A place for ideas to grow.</h2>
+              <p className="mt-6 max-w-2xl leading-7 text-white/70">Fundora helps thoughtful supporters discover meaningful projects, and gives creators a transparent way to turn brave ideas into real community impact.</p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2"><div className="rounded-2xl bg-white/10 p-5"><b className="text-lime">Transparent progress</b><p className="mt-2 text-sm leading-6 text-white/65">See goals, funding progress, deadlines and campaign updates in one clear place.</p></div><div className="rounded-2xl bg-white/10 p-5"><b className="text-lime">Built for community</b><p className="mt-2 text-sm leading-6 text-white/65">Every credit supports creators who are building practical change around them.</p></div></div>
+              <Link href="/explore" className="btn-lime mt-8">Discover campaigns <ArrowRight className="ml-2" size={18} /></Link>
+            </div>
+            <div className="relative min-h-72"><Image src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=85" alt="Creators collaborating on an idea" fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover" /></div>
+          </div>
+        </section>
         <section className="container-app pb-8 pt-16">
           <div className="rounded-[2.5rem] bg-forest p-10 text-center text-white md:p-16">
             <ShieldCheck className="mx-auto text-lime" size={42} />

@@ -23,6 +23,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col gap-2 text-white/70">
           <Link href="/explore" className={linkClass("/explore")}>Explore projects</Link>
+          <Link href="/#about" className="transition-colors hover:text-lime active:text-lime">About Fundora</Link>
           <Link href="/register" className={linkClass("/register")}>Start a campaign</Link>
           <Link href="/login" className={linkClass("/login")}>Sign in</Link>
           <a className="transition-colors hover:text-lime active:text-lime" href="https://github.com/GalibDev/Fundora" target="_blank" rel="noreferrer">Join as developer</a>
