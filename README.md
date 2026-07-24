@@ -30,11 +30,11 @@ Fundora connects people who have meaningful ideas with supporters who want to fu
 
 <p align="center">
   <a href="https://fundora-hazel.vercel.app">
-    <img src="https://image.thum.io/get/width/1200/crop/720/https://fundora-hazel.vercel.app" alt="Fundora home page preview" width="900" />
+    <img src="https://image.thum.io/get/width/1200/crop/720/noanimate/https://fundora-hazel.vercel.app/?v=20260725" alt="Current Fundora homepage preview" width="900" />
   </a>
 </p>
 
-> The preview links to the live project. Open the live site for the complete responsive experience.
+> This preview is generated from the current live deployment and links to the complete responsive experience.
 
 ## Highlights
 
