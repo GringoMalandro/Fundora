@@ -14,7 +14,7 @@ export default function Footer() {
     <footer className="mt-6 bg-ink text-white">
       <div className="container-app grid gap-10 py-14 md:grid-cols-3">
         <div>
-          <div className="text-2xl font-black"><span className="text-lime">F</span>undora</div>
+          <Link href="/" className="text-2xl font-black transition-colors hover:text-lime"><span className="text-lime">F</span>undora</Link>
           <p className="mt-3 max-w-sm text-white/60">Backing brave ideas with transparent, community-powered funding.</p>
         </div>
         <div className="flex flex-col gap-2 text-white/70">

@@ -71,9 +71,9 @@ export default function Home() {
     <>
       <Navbar />
       <main>
-        <section className="container-app py-8 md:py-14">
-          <div className="relative overflow-hidden rounded-[2.5rem] bg-ink px-7 py-16 text-white md:px-16 md:py-24">
-            <div className="absolute -right-20 -top-24 size-80 rounded-full bg-lime/20 blur-3xl" />
+        <section className="container-app py-5 md:py-8">
+          <div className="relative flex min-h-[400px] items-center overflow-hidden rounded-[2rem] bg-ink px-7 py-12 text-white sm:min-h-[430px] md:min-h-[460px] md:px-12 md:py-14 lg:min-h-[490px] lg:px-16">
+            <div className="absolute -right-20 -top-24 size-80 rounded-full bg-lime/20 blur-3xl" /><div className="absolute -bottom-32 left-1/3 size-72 rounded-full bg-forest/60 blur-3xl" />
             <motion.div
               key={slide}
               {...reveal}
@@ -82,15 +82,15 @@ export default function Home() {
               <div className="eyebrow !text-lime">
                 Community capital, real change
               </div>
-              <h1 className="mt-5 text-5xl font-black leading-[.95] tracking-[-.05em] md:text-8xl">
+              <h1 className="mt-4 text-4xl font-black leading-[.95] tracking-[-.05em] sm:text-5xl md:text-7xl lg:text-8xl">
                 {banners[slide][0]}
                 <br />
                 <span className="text-lime">{banners[slide][1]}</span>
               </h1>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-white/70">
+              <p className="mt-6 max-w-xl text-base leading-7 text-white/70 md:text-lg md:leading-8">
                 {banners[slide][2]}
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-wrap gap-3">
                 <Link href="/explore" className="btn-lime">
                   Explore ideas <ArrowRight className="ml-2" size={18} />
                 </Link>
