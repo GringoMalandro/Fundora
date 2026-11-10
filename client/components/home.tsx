@@ -1,5 +1,5 @@
-import CopyPayment from "@/components/copy-payment";
 "use client";
+import CopyPayment from "@/components/copy-payment";
 import Link from "next/link";
 import { ArrowRight, Search, Heart, MapPin, FileText, Wallet, Globe2 } from "lucide-react";
 import { useState } from "react";
